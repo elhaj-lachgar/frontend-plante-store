@@ -1,16 +1,19 @@
 import Banner from "../components/Banner";
-import CollectionComponents, { TProps } from "../components/CollectionComponents";
+import CollectionComponents, {
+  TProps,
+} from "../components/CollectionComponents";
 import FeatureComponent from "../components/FeatureComponent";
 import Footer from "../components/Footer";
 import { SectionItems, TPLante } from "../lib/utils";
-import { useContext, useEffect, useState } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { PlanteContext } from "../context/PlanteContext";
 import GetPlantes from "../integration/get-plantes";
 import GetCategorys from "../integration/get-category";
+import Loading from "../components/Loading";
 
 function Home() {
   const { plantes, setPlantes } = useContext(PlanteContext);
-  const [ categorys , setCategorys ] = useState<TProps>([]);
+  const [categorys, setCategorys] = useState<TProps>([]);
   const fetching = async () => {
     const res = await GetPlantes(0);
     if (!res) return;
@@ -33,11 +36,11 @@ function Home() {
     setPlantes(arr);
   };
 
-  const fetchCategory = async ( ) => {
+  const fetchCategory = async () => {
     const res = await GetCategorys();
-    if(!res) return;
-    setCategorys(res.data.data as TProps)
-  }
+    if (!res) return;
+    setCategorys(res.data.data as TProps);
+  };
 
   useEffect(() => {
     fetching();
@@ -58,7 +61,9 @@ function Home() {
           </div>
         ))}
       </div>
-      <CollectionComponents arr={categorys} />
+      <Suspense fallback={<Loading />}>
+        <CollectionComponents arr={categorys} />
+      </Suspense>
       <div className="flex flex-col items-center mt-20 mb-10">
         <h1 className="text-center w-full font-bold text-xl lg:text-2xl">
           Featured Plants
@@ -66,28 +71,29 @@ function Home() {
         <p className="text-center  mb-20 mt-5 w-[300px]">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
-        <div className="mt-5 flex flex-wrap gap-8 lg:w-11/12 justify-center mx-auto">
-          {plantes.length > 0 ? (
-            <>
-              {plantes.map((data) => {
-
-                return (
-                  <FeatureComponent
-                    id={data.id}
-                    category={data.categoryId}
-                    image={data.imageUrl}
-                    price={data.price}
-                    currency={data.currency}
-                    rating={data.rating}
-                    title={data.name}
-                    discountPrice={data.discountPrice}
-                    key={data.id}
-                  />
-                );
-              })}
-            </>
-          ) : null}
-        </div>
+        <Suspense fallback={<Loading />}>
+          <div className="mt-5 flex flex-wrap gap-8 lg:w-11/12 justify-center mx-auto">
+            {plantes.length > 0 ? (
+              <>
+                {plantes.map((data) => {
+                  return (
+                    <FeatureComponent
+                      id={data.id}
+                      category={data.categoryId}
+                      image={data.imageUrl}
+                      price={data.price}
+                      currency={data.currency}
+                      rating={data.rating}
+                      title={data.name}
+                      discountPrice={data.discountPrice}
+                      key={data.id}
+                    />
+                  );
+                })}
+              </>
+            ) : null}
+          </div>
+        </Suspense>
       </div>
       <Footer />
     </div>

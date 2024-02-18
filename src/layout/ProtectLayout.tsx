@@ -1,6 +1,7 @@
-import { useLayoutEffect } from "react";
+import { Suspense, useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileSideBar from "../components/ProfileSideBar";
+import Loading from "../components/Loading";
 
 function ProtectLayout({ children }: { children: React.ReactNode }) {
   const router = useNavigate();
@@ -13,7 +14,7 @@ function ProtectLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex ">
       <ProfileSideBar />
-      {children}
+      <Suspense fallback={<Loading />}>{children}</Suspense>
     </main>
   );
 }
