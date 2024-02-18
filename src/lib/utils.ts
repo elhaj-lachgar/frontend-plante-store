@@ -217,6 +217,6 @@ export type Orders = [
 ]
 
 
-export const DOMAINE_NAME = "http://localhost:8000";
+export const DOMAINE_NAME = "https://plante-stora.onrender.com";
 
 export const COUPON = "9a950c39-5b33-4736-9ec0-f3bd0e110534"
