@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { TAddress, TUser } from "../lib/utils";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { MapPin, TrashIcon } from "lucide-react";
 import AddAddressModule from "../components/AddAddressModule";
 import GetAddresses from "../integration/get-address";
@@ -8,12 +8,20 @@ import toast from "react-hot-toast";
 import DeleteAddress from "../integration/delete-address";
 import cn from "classnames";
 import UpdateAddressModule from "../components/UpdateAddressModule";
+import { useDispatch } from "react-redux";
+import { DeleteAllItems } from "../context/CardFeatures";
+
+
 
 function Profile() {
+
+  const dispatch  = useDispatch();
   const [user, setUser] = useState<TUser | null>(null);
   const [address, setAddress] = useState<TAddress[] | null>(null);
-  // const search = useSearchParams();
-  // console.log(search);
+  const [pay] = useSearchParams(); 
+  if(pay?.get("pay") == "true") {
+    dispatch(DeleteAllItems())
+  }
   const [loading, setLoading] = useState(false);
   const [load, setLoad] = useState(false);
   const router = useNavigate();

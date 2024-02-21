@@ -197,6 +197,20 @@ export const counterSlice = createSlice({
         })
       );
     },
+    DeleteAllItems:(state) => {
+      state.card.cardItems = [];
+      state.card.totalePrice = 0;
+      state.card.couponId = undefined;
+      state.card.percentage = undefined;
+      state.card.discountPrice = undefined ; 
+      window.localStorage.setItem(
+        "card",
+        JSON.stringify({
+          cardItems:[],
+          totalePrice: 0,
+        })
+      );
+    }
   },
 });
 
@@ -207,6 +221,7 @@ export const {
   LoadFromStorage,
   setCoupon,
   setCouponItems,
+  DeleteAllItems
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

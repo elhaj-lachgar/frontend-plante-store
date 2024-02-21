@@ -51,6 +51,10 @@ function PlanetDetails() {
     fetcher();
   }, [load]);
 
+  useEffect(() => {
+    fetcher();
+  }, []);
+
   useLayoutEffect(() => {
     const token = window.localStorage.getItem("token");
     if (token) setIsToken(true);
@@ -109,7 +113,9 @@ function PlanetDetails() {
                     setClicked(!click);
                     setTimeout(() => setClicked(false), 1000);
                     dispatch(AddToCard(cardInfo));
-                    toast.success("plante added successfully" , {duration: 3000})
+                    toast.success("plante added successfully", {
+                      duration: 3000,
+                    });
                   }}
                   className={cn(click ? "animate-ping" : "animate-none")}
                 >
@@ -129,8 +135,7 @@ function PlanetDetails() {
                   return (
                     <div className="w-[300px]">
                       <FeatureComponent
-                        load={load}
-                        setLoad={setLoad}
+                        load={true}
                         id={ele.id}
                         category={ele.categoryId}
                         image={ele.imageUrl}
