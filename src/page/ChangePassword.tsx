@@ -102,11 +102,11 @@ function ChangePassword() {
             )}
           >
             <EyeOff
-              className={newstatus ? "block" : "hidden"}
+              className={newstatus ? "block cursor-pointer z-10" : "hidden"}
               onClick={() => setNewStatus(!newstatus)}
             />
             <Eye
-              className={newstatus ? "hidden" : "block"}
+              className={newstatus ? "hidden" : "block cursor-pointer z-10"}
               onClick={() => setNewStatus(!newstatus)}
             />
           </div>
@@ -139,6 +139,7 @@ function ChangePassword() {
         <Button
           className="bg-blue-500 hover:bg-blue-400 text-white"
           isLoading={loading}
+          cursor={loading ? "not-allowed" : "pointer"}
           type="submit"
         >
           Update Password

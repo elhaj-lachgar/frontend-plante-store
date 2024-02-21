@@ -48,7 +48,7 @@ function OrderItem({
         <hr />
         <div className="flex flex-wrap gap-14 justify-center">
           {cardItem.map((item : any) => (
-            <div className="flex gap-x-2 items-center">
+            <div key={item.plante.name} className="flex gap-x-2 items-center">
               <div className="relative w-[75px] h-[75px]">
                 <img
                   src={item.plante.imageUrl || "/book.avif"}

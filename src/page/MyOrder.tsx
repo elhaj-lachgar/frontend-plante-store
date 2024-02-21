@@ -13,7 +13,7 @@ function MyOrder() {
     featcher();
   }, []);
   return (
-    <div className="w-full flex flex-col gap-y-5">
+    <div className="flex flex-col gap-y-5">
       {orders ? (
         <>
           {orders.map((order: any) => (

@@ -1,7 +1,7 @@
-import { Button, Input } from "@chakra-ui/react";
+import { Button, FormLabel, Input} from "@chakra-ui/react";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { Link , useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   TSignUpCredentials,
@@ -14,9 +14,9 @@ import toast from "react-hot-toast";
 function SignUp() {
   const [Confirmstatus, setConfirmStatus] = useState(false);
   const [status, setStatus] = useState(false);
-  const [ error , setError] = useState<null | string >(null);
-  const [ confirmPassword, setConfirmPassword] = useState<null|string>(null);
-  const [ loading , setLoading] = useState(false);
+  const [error, setError] = useState<null | string>(null);
+  const [confirmPassword, setConfirmPassword] = useState<null | string>(null);
+  const [loading, setLoading] = useState(false);
   const router = useNavigate();
   const {
     register,
@@ -27,36 +27,50 @@ function SignUp() {
     resolver: resolvers,
   });
   const SubmitHandler = async (params: TSignUpCredentials) => {
-    if(!confirmPassword || confirmPassword != params.password) {
+    if (!confirmPassword || confirmPassword != params.password) {
       setError("password not matched");
       return;
     }
     setLoading(true);
-    const res = await SignUpHandler(params.name , params.email , params.password , confirmPassword , params.profile[0]);
-    if(!res){
+    const res = await SignUpHandler(
+      params.name,
+      params.email,
+      params.password,
+      confirmPassword,
+      params.profile[0]
+    );
+    if (!res) {
       setLoading(false);
-      toast.error("same thing gose wrong",{
-        className : "bg-red-300"
-      })
+      toast.error("same thing gose wrong", {
+        className: "bg-red-300",
+      });
       return;
-    }
-    else{
+    } else {
       setLoading(false);
       toast.success("login successful");
       router("/");
       return;
     }
   };
+
+  const HandleEyesClassName = () => {
+
+    if (errors.password)
+      return "z-10 absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5  top-[-120px] md:top-[-75px] ";
+    if (error)
+      return "z-10 absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 top-[-20px] md:top-[0px]";
+    return "z-10 absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 top-1/3";
+  };
   return (
-    <div className="w-11/12 lg:w-[500px] flex flex-col px-2 lg:px-5 gap-y-3 border rounded-xl py-4 bg-white">
-      <h1 className="text-center w-full font-bold text-2xl">Sign up</h1>
+    <div className="w-11/12 md:w-[500px] lg:w-[500px] flex flex-col px-2 md:px-5 gap-y-3 border rounded-xl py-4 bg-white">
+      <h1 className="text-center w-full  font-mono text-2xl">Sign up</h1>
       <form
         className="flex flex-col gap-y-3"
         id="form"
         onSubmit={handleSubmit(SubmitHandler)}
       >
         <div className="flex flex-col gap-y-2">
-          <label>Email</label>
+          <FormLabel>Email</FormLabel>
           <Input type="text" {...register("email")} />
           {errors.email ? (
             <p className="text-red-400">{errors.email.message}</p>
@@ -69,19 +83,13 @@ function SignUp() {
               type={status ? "text" : "password"}
               {...register("password")}
             />
-            <div
-              className={cn(
-                !errors.password
-                  ? "absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 top-1/3"
-                  : "absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 top-[-30px]"
-              )}
-            >
+            <div className={HandleEyesClassName()}>
               <EyeOff
-                className={status ? "block" : "hidden"}
+                className={cn("cursor-pointer", status ? "block" : "hidden")}
                 onClick={() => setStatus(!status)}
               />
               <Eye
-                className={status ? "hidden" : "block"}
+                className={cn("cursor-pointer", status ? "hidden" : "block")}
                 onClick={() => setStatus(!status)}
               />
             </div>
@@ -93,27 +101,25 @@ function SignUp() {
             <label>comfirm password</label>
             <Input
               type={Confirmstatus ? "text" : "password"}
-              onChange={(e)=>setConfirmPassword(e.currentTarget.value)}
+              onChange={(e) => setConfirmPassword(e.currentTarget.value)}
             />
-            <div
-              className={cn(
-                !errors.password
-                  ? "absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 top-1/3"
-                  : "absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 top-[-30px]"
-              )}
-            >
+            <div className={HandleEyesClassName()}>
               <EyeOff
-                className={Confirmstatus ? "block" : "hidden"}
+                className={cn(
+                  "cursor-pointer",
+                  Confirmstatus ? "block" : "hidden"
+                )}
                 onClick={() => setConfirmStatus(!Confirmstatus)}
               />
               <Eye
-                className={Confirmstatus ? "hidden" : "block"}
+                className={cn(
+                  "cursor-pointer",
+                  Confirmstatus ? "hidden" : "block"
+                )}
                 onClick={() => setConfirmStatus(!Confirmstatus)}
               />
             </div>
-            {error ? (
-              <p className="text-red-400">{error}</p>
-            ) : null}
+            {error ? <p className="text-red-400">{error}</p> : null}
           </div>
         </div>
         <div className="flex flex-row gap-x-3 justify-between">
@@ -144,6 +150,7 @@ function SignUp() {
             };
             SubmitHandler(data);
           }}
+          cursor={loading ? "not-allowed" : "pointer"}
         >
           Sign up
         </Button>

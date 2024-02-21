@@ -29,7 +29,7 @@ function Header() {
       <div className="w-full flex justify-between items-center px-2">
         <Link
           to={"/"}
-          className="flex gap-x-2 items-center text-xl font-medium"
+          className="flex gap-x-2 items-center text-xl font-mono"
         >
           <Logo />
           Simply Natural

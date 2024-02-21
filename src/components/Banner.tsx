@@ -4,7 +4,14 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import GetPlante from "../integration/get-plants";
 import { PlanteContext } from "../context/PlanteContext";
+import { TPagination } from "../lib/utils";
+import GetSearchResults from "../integration/get-searched";
+import cn from "classnames";
 
+type TSearched = {
+  value: string;
+  id: string;
+};
 
 function Banner({
   image,
@@ -15,15 +22,20 @@ function Banner({
   text?: string;
   search?: string;
 }) {
+  const { setPlantes, setSearch, changePagination } = useContext(PlanteContext);
+  const [keyword, setKeyword] = useState<null | string>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<TSearched[]>([]);
+  const [close, setClose] = useState(true);
 
-  const { setPlantes } = useContext(PlanteContext);
-  const [ keyword , setKeyword ] = useState<null|string>(null);
-
-  const SearchHandler = async ()=>{
-    if(!keyword) return;
-    const res = await GetPlante (keyword);
-    if(!res) return;
-    const arr = res.data.data.map( (plante:any)=>{
+  const SearchHandler = async () => {
+    if (!keyword) return;
+    setLoading(true);
+    const res = await GetPlante(keyword);
+    setLoading(false);
+    setClose(true);
+    if (!res) return;
+    const arr = res.data.data.map((plante: any) => {
       return {
         id: plante.id,
         name: plante.name,
@@ -37,9 +49,20 @@ function Banner({
         createdAt: plante.createdAt,
         updatedAt: plante.updatedAt,
       };
-    })
+    });
+    changePagination(res.data.pagination as TPagination);
     setPlantes(arr);
-  }
+    setSearch(true);
+  };
+
+  const searched = async (value: string) => {
+    const res = await GetSearchResults(value);
+    if (!res) {
+      setSearchValue([]);
+      return;
+    }
+    setSearchValue(res.result as TSearched[]);
+  };
 
   return (
     <div className="w-full h-[400px] lg:h-[500px] relative">
@@ -56,11 +79,46 @@ function Banner({
               {text}
             </p>
             {search ? (
-              <div className="flex gap-x-3 items-center">
-                <Button  onClick={()=>SearchHandler()} cursor={keyword ? "pointer" : "not-allowed"}>
-                  <Search/>
-                </Button>
-                <Input borderColor={"black"} onChange={(e)=>setKeyword(e.currentTarget.value)}/>
+              <div className="flex flex-col  gap-y-1 ">
+                <div className="flex gap-x-3 items-center">
+                  <Button
+                    onClick={() => SearchHandler()}
+                    cursor={keyword ? "pointer" : "not-allowed"}
+                    isLoading={loading}
+                  >
+                    <Search />
+                  </Button>
+                  <Input
+                    value={keyword || ""}
+                    borderColor={"black"}
+                    onChange={(e) => {
+                      setClose(false);
+                      searched(e.currentTarget.value);
+                      setKeyword(e.currentTarget.value);
+                    }}
+                  />
+                </div>
+                <div
+                  className={cn(
+                    close
+                      ? "hidden"
+                      : "flex flex-col bg-gray-50 px-3 py-2 border rounded-lg shadow-md"
+                  )}
+                >
+                  {searchValue.map((vl, i) => (
+                    <>
+                      <p
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setKeyword(vl.value);
+                        }}
+                      >
+                        {vl.value}
+                      </p>
+                      {searchValue.length - 1 != i && <hr />}
+                    </>
+                  ))}
+                </div>
               </div>
             ) : null}
           </div>

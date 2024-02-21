@@ -19,7 +19,7 @@ function PerCheckout({
   currency: "USD" | "EUR";
 }) {
   const [loading, setLoading] = useState(false);
-  const { cardItems , couponId } = useSelector((state: RootState) => state.card);
+  const { cardItems, couponId } = useSelector((state: RootState) => state.card);
   const [coupon, setCoupons] = useState<null | string>(null);
   const [Cloading, setCLoading] = useState(false);
   const router = useNavigate();
@@ -55,8 +55,11 @@ function PerCheckout({
     const arr: TArr[] = cardItems.map((item) => {
       return { id: item.id, quantity: item.quantity };
     });
-    if (arr.length == 0) return;
-    const res = await SetCard(arr,couponId);
+    if (arr.length == 0) {
+      toast.error("cart is empty", { duration: 3000 });
+      return;
+    }
+    const res = await SetCard(arr, couponId);
     if (!res) {
       setLoading(false);
       return;
@@ -92,6 +95,7 @@ function PerCheckout({
             CouponHandler();
           }}
           isLoading={Cloading}
+          cursor={Cloading ? "not-allowed" : "pointer"}
         >
           Apply Coupon
         </Button>
@@ -104,6 +108,7 @@ function PerCheckout({
           _hover={{ backgroundColor: "rgb(74 222 128)" }}
           width={"100%"}
           isLoading={loading}
+          cursor={loading ? "not-allowed" : "pointer"}
           onClick={SetCardHandler}
           size={"sm"}
         >

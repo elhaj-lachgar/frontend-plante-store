@@ -2,8 +2,11 @@ import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
 import DeleteReview from "../integration/delete-review";
+import UpdateReview from "./UpdateReview";
 
 function ReviewItem({
+  setLoad,
+  laod,
   planteId,
   id,
   image,
@@ -19,6 +22,8 @@ function ReviewItem({
   content: string;
   userId: string;
   rating: number;
+  setLoad: React.Dispatch<React.SetStateAction<boolean>>;
+  laod: boolean;
 }) {
   const [user, setUser] = useState<any>(null);
 
@@ -28,9 +33,10 @@ function ReviewItem({
   }, []);
 
   const DeleteHandler = async () => {
-    const res = await DeleteReview(id , planteId);
+    const res = await DeleteReview(id, planteId);
+
     if (!res) return;
-    window.location.reload();
+    setLoad(!laod);
   };
   return (
     <>
@@ -55,12 +61,20 @@ function ReviewItem({
           </div>
         </div>
         {user?.id == userId ? (
-          <div className=" flex items-center gap-x-1 md:gap-x-3">
+          <div className=" flex items-center gap-x-4">
             <Trash2
               className="cursor-pointer"
               onClick={() => {
                 DeleteHandler();
               }}
+            />
+            <UpdateReview
+              load={laod}
+              setLoad={setLoad}
+              currentContent={content}
+              currentRating={rating}
+              id={id}
+              key={id}
             />
           </div>
         ) : null}

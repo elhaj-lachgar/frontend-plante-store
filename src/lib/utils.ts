@@ -3,6 +3,13 @@ import { Sprout, Package2, Recycle, Box } from "lucide-react";
 import { Facebook, Linkedin, Instagram, TwitterIcon } from "lucide-react";
 import { User, UserRoundCog, LockKeyhole , Home} from "lucide-react";
 
+export type TPagination = {
+  page: number,
+  limit:  number,
+  total: number,
+  totalPages: number
+}
+
 export const HeaderItems = [
   {
     name: "Home",
@@ -36,23 +43,6 @@ export const SectionItems = [
   },
 ];
 
-export const CollectionItems = [
-  {
-    title: "Beautiful Plant Varieties",
-    desc: "Luctus nec ullamcorper mattis, pulvinar dapibus leo.",
-    img: "/cactus2-free-img.jpg",
-  },
-  {
-    title: "Trendy Cactus Varieties",
-    desc: "Luctus nec ullamcorper mattis, pulvinar dapibus leo.",
-    img: "/cactus4-free-img.jpg",
-  },
-  {
-    title: "Gardening Accessories",
-    desc: "Luctus nec ullamcorper mattis, pulvinar dapibus leo.",
-    img: "/cactus6-free-img.jpg",
-  },
-];
 
 export function FormatPrice(price: { value: number; currency: "USD" | "EUR" }) {
   return new Intl.NumberFormat("en-US", {
@@ -61,87 +51,10 @@ export function FormatPrice(price: { value: number; currency: "USD" | "EUR" }) {
   }).format(price.value);
 }
 
-export const DamyData: {
-  image: string;
-  price: {
-    value: number;
-    currency: "USD" | "EUR";
-  };
-  discountPrice?: number;
-  rating: number;
-  title: string;
-  category: string;
-}[] = [
-  {
-    image: "/plant1-free-img.jpg",
-    category: "Cactus",
-    title: "Cleistocactus",
-    price: {
-      value: 25.0,
-      currency: "USD",
-    },
-    rating: 0,
-  },
-  {
-    image: "/plant3-free-img.jpg",
-    category: "Cactus",
-    title: "Cleistocactus",
-    price: {
-      value: 18.0,
-      currency: "USD",
-    },
-    rating: 0,
-  },
-  {
-    image: "/plant4-free-img.jpg",
-    category: "Cactus",
-    title: "Cleistocactus",
-    price: {
-      value: 20.0,
-      currency: "USD",
-    },
-    rating: 0,
-  },
-  {
-    image: "/plant5-free-img.jpg",
-    category: "Cactus",
-    title: "Cleistocactus",
-    price: {
-      value: 24.0,
-      currency: "USD",
-    },
-    discountPrice: 36,
-    rating: 0,
-  },
-  {
-    image: "/plant6-free-img.jpg",
-    category: "Cactus",
-    title: "Cleistocactus",
-    price: {
-      value: 25.0,
-      currency: "USD",
-    },
-    discountPrice: 30,
-    rating: 0,
-  },
-];
 
 export const Social = [Facebook, Linkedin, Instagram, TwitterIcon];
 
-export const Addresses = [
-  {
-    id: "1",
-    city: "Bouznika",
-    country: "maroc",
-    codePostal: 13100,
-  },
-  {
-    id: "2",
-    city: "Bouznika",
-    country: "maroc",
-    codePostal: 13100,
-  },
-];
+
 
 export type TUser = {
   id: string;
@@ -208,15 +121,8 @@ export type TPLante = {
 
 
 
-export type Orders = [
-  {
-    id : "jskjoainkjdszilla",
-    isDelaiverd : false,
-    
-  }
-]
 
 
-export const DOMAINE_NAME = "https://plante-stora.onrender.com";
+export const DOMAINE_NAME = "http://localhost:8000";
 
 export const COUPON = "9a950c39-5b33-4736-9ec0-f3bd0e110534"

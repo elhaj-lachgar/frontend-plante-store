@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <ChakraProvider>
             <App />
-            <Toaster />
+            <Toaster position="top-center"  />
           </ChakraProvider>
         </BrowserRouter>
       </PlanteProvider>

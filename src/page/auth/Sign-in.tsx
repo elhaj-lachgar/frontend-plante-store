@@ -44,7 +44,7 @@ function SignIn() {
 
   return (
     <div className=" w-11/12 md:w-[400px] flex flex-col px-2 lg:px-5 gap-y-3 border rounded-xl py-4 bg-white">
-      <h1 className="text-2xl  font-black text-center w-full">Log In</h1>
+      <h1 className="text-2xl  font-mono text-center w-full">Log In</h1>
       <form className="flex flex-col gap-y-3" onSubmit={handleSubmit(SubmitHandler)}>
         <div className=" gap-y-2 flex-col">
           <label className="text-muted-foreground font-bold">Email</label>
@@ -100,6 +100,7 @@ function SignIn() {
           color={"white"}
           type="submit"
           isLoading={loading}
+          cursor={loading ? "not-allowed" : "pointer"}
         >
           {"Log in"}
         </Button>

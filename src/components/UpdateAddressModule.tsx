@@ -10,68 +10,78 @@ import {
   Button,
   Input,
 } from "@chakra-ui/react";
-import { Plus } from "lucide-react";
-import React, { useState } from "react";
+import { Pen } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import cn from "classnames";
 import {
-  TAddAddressCredentials,
-  resolver,
-} from "../validator/add-address-validator";
-import AddAddresse from "../integration/add-address";
+  resolvers,
+  TUpateAddressCredentials,
+} from "../validator/update-address-validator";
+import cn from "classnames";
 import toast from "react-hot-toast";
-
+import UpdateAddressHandler from "../integration/update-address";
 
 type TProps = {
-  setLoad:React.Dispatch<React.SetStateAction<boolean>>; 
-  load : boolean ;
-}
+  currentCity: string;
+  currentStreet: string;
+  currentCountry: string;
+  currentCodePostal: number;
+  id: string;
+  load: boolean;
+  setLoad: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-
-function AddAddressModule({setLoad , load} :TProps) {
-  const [loading, setLoading] = useState(false);
+function UpdateAddressModule({
+  currentCity,
+  currentCodePostal,
+  currentCountry,
+  currentStreet,
+  id,
+  load,
+  setLoad,
+}: TProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const finalRef = React.useRef(null);
+  const [loading, setLoading] = useState(false);
+
   const {
     formState: { errors },
     register,
     handleSubmit,
-  } = useForm<TAddAddressCredentials>({
-    resolver,
+  } = useForm<TUpateAddressCredentials>({
+    resolver: resolvers,
   });
 
-  const SubmitHandler = async (params: TAddAddressCredentials) => {
-    const res = await AddAddresse(
-      params.country,
-      params.city,
-      params.street,
-      parseInt(params.codePostal)
-    );
-    if (!res) {
-      setLoading(false);
-      toast.error("same thing gose wrong", {
-        className: "bg-red-300",
-      });
-      return;
-    } else {
-      setLoading(false);
-      toast.success("add address successful");
-      onClose();
-      setLoad(!load);
+  const SubmitHandler = async (params: TUpateAddressCredentials) => {
+    if (
+      params.city == currentCity &&
+      params.street == currentStreet &&
+      params.country == currentCountry &&
+      parseInt(params.codePostal) == currentCodePostal
+    ) {
+      toast.error("you change nothing", { duration: 3000 });
       return;
     }
+    setLoading(true);
+    const res = await UpdateAddressHandler(
+      id,
+      params.city,
+      params.street,
+      params.country,
+      parseInt(params.codePostal)
+    );
+    setLoading(false);
+    if(!res){
+        toast.error('internal error please wait to fix probleme' ,{duration: 3000});
+        return;
+    }
+    setLoad(!load);
+    onClose();
   };
+
   return (
     <>
-      <Button
-        width={"100%"}
-        leftIcon={<Plus className="text-blue-700" />}
-        color={"rgb(29 78 216)"}
-        onClick={onOpen}
-      >
-        Add Address
-      </Button>
-      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Pen className="cursor-pointer" onClick={onOpen} />
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add Address</ModalHeader>
@@ -85,6 +95,7 @@ function AddAddressModule({setLoad , load} :TProps) {
                 <div className="flex flex-col gap-y-1  w-full">
                   <label>Country</label>
                   <Input
+                    defaultValue={currentCountry}
                     placeholder="entre your country..."
                     {...register("country")}
                     className={cn(
@@ -102,6 +113,7 @@ function AddAddressModule({setLoad , load} :TProps) {
                 <div className="flex flex-col gap-y-1  w-full">
                   <label>City</label>
                   <Input
+                    defaultValue={currentCity}
                     placeholder="entre your country..."
                     {...register("city")}
                     className={cn(
@@ -119,6 +131,7 @@ function AddAddressModule({setLoad , load} :TProps) {
                 <div className="flex flex-col gap-y-1  w-full">
                   <label>Streat</label>
                   <Input
+                    defaultValue={currentStreet}
                     placeholder="entre your country..."
                     {...register("street")}
                     className={cn(
@@ -136,6 +149,7 @@ function AddAddressModule({setLoad , load} :TProps) {
                 <div className="flex flex-col gap-y-1  w-full">
                   <label>Code Postal</label>
                   <Input
+                    defaultValue={currentCodePostal}
                     type="number"
                     placeholder="entre your country..."
                     {...register("codePostal")}
@@ -179,4 +193,4 @@ function AddAddressModule({setLoad , load} :TProps) {
   );
 }
 
-export default AddAddressModule;
+export default UpdateAddressModule;

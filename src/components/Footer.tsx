@@ -8,8 +8,8 @@ function Footer() {
         <Logo />
         <h1 className="text-gray-500 text-lg font-semibold">Simply Naturel</h1>
         <div className="flex w-[200px] justify-between">
-          {Social.map((Icon) => (
-            <div className="bg-gray-500 p-2 rounded cursor-pointer">
+          {Social.map((Icon,i) => (
+            <div  key={i} className="bg-gray-500 p-2 rounded cursor-pointer">
               <Icon color="white"  />
             </div>
           ))}

@@ -42,9 +42,9 @@ function CollectionComponents({arr}:{arr: TProps}) {
   return (
     <div className="flex flex-col gap-y-5 gap-x-4 items-center lg:flex-row lg:w-11/12 lg:mx-auto">
       {arr.map((collection) => (
-        <div className="bg-green flex flex-col items-center relative w-11/12 h-[500px] md:h-[600px] lg:h-[500px] rounded-lg">
+        <div key={collection.id} className="bg-green flex flex-col items-center relative w-11/12 h-[500px] md:h-[600px] lg:h-[500px] rounded-lg">
           <img
-            src={collection.imageUrl}
+            src={collection.imageUrl || "cactus2-free-img.jpg"}
             alt="collection image"
             className="object-cover w-full h-full rounded-lg"
           />

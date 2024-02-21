@@ -9,46 +9,55 @@ import {
   Button,
   useDisclosure,
 } from "@chakra-ui/react";
-import { PenBox } from "lucide-react";
+import { Pen } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Star from "react-star-ratings";
-import CreateReviewHandler from "../integration/create-review";
+import UpdateReviewService from "../integration/update-review";
 
-function CreateReview({
-  id,
-  setLoad,
-  laod
-}: {
-  id: string;
+type TProps = {
+  load: boolean;
   setLoad: React.Dispatch<React.SetStateAction<boolean>>;
-  laod : boolean;
-}) {
+  id: string;
+  currentRating: number;
+  currentContent: string;
+};
+
+function UpdateReview({
+  load,
+  setLoad,
+  id,
+  currentRating,
+  currentContent,
+}: TProps) {
   const [rating, setRating] = useState(5);
   const [content, setContent] = useState<null | string>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [ loading , setLoading] = useState(false)
-  const CreateHandler = async () => {
+  const [loading, setLoading] = useState(false);
+
+  const UpdateReviewHandler = async () => {
     if (!content) {
-      toast.error("content required", { duration: 2000 });
+      toast.error("content is required", { duration: 3000 });
       return;
     }
-    setLoading(true);
-    const res = await CreateReviewHandler(id, rating, content);
+    if (content == currentContent && rating == currentRating) {
+      toast.error("you don't change any thing", { duration: 3000 });
+      return;
+    }
+    setLoading(true)
+    const res = await UpdateReviewService(id, rating, content);
     setLoading(false);
     if (!res) {
-      toast.error("same thing wrong", { duration: 2000 });
+      toast.error("internal error", { duration: 3000 });
       return;
     }
-    setLoad(!laod);
+    setLoad(!load);
     onClose();
-    // window.location.reload();
   };
   return (
     <>
-      <Button onClick={onOpen}>
-        <PenBox />
-      </Button>
+      <Pen className="cursor-pointer" onClick={onOpen} />
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -62,23 +71,24 @@ function CreateReview({
                 starSpacing="3px"
                 starRatedColor="yellow"
                 starHoverColor="yellow"
-                rating={rating}
+                rating={currentRating}
               />
               <Textarea
+                defaultValue={currentContent}
                 className="h-[50px]"
                 placeholder="Entre your feed back..."
                 onChange={(e) => setContent(e.currentTarget.value)}
               />
 
-              <div className=" flex w-full justify-end gap-x-3 items-center relative">
+              <div className=" flex w-full justify-end gap-x-3  items-center relative">
                 <Button
-                  onClick={CreateHandler}
-                  backgroundColor={"rgb(59 130 246)"}
+                  onClick={UpdateReviewHandler}
+                  backgroundColor={"rgb(34 197 94 )"}
                   color={"white"}
                   isLoading={loading}
                   cursor={loading ? "not-allowed" : "pointer"}
                 >
-                  Save
+                  update
                 </Button>
                 <Button variant={"outline"} onClick={onClose}>
                   Back
@@ -92,6 +102,4 @@ function CreateReview({
   );
 }
 
-/**  */
-
-export default CreateReview;
+export default UpdateReview;

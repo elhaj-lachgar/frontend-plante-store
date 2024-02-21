@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { FormatPrice } from "../lib/utils";
+import { FormatPrice, TPLante } from "../lib/utils";
 import { Button } from "@chakra-ui/react";
 import Footer from "../components/Footer";
 import { useDispatch } from "react-redux";
@@ -10,21 +10,32 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
 import ReviewItem from "../components/ReviewItem";
 import CreateReview from "../components/CreateReview";
+import FeatureComponent from "../components/FeatureComponent";
+import toast from "react-hot-toast";
+import LoadingComponent from "../components/Loading";
+import cn from "classnames";
 
 function PlanetDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
   const [istoken, setIsToken] = useState(false);
+  const [load, setLoad] = useState(false);
+  const [click, setClicked] = useState(false);
 
   const fetcher = async () => {
     if (!id) return;
+    setLoading(true);
     const res = await GetDetailsPlante(id);
-    if (!res) return;
+    setLoading(false);
+    if (!res) {
+      toast.error("fetching error", { duration: 3000 });
+      return;
+    }
     setData(res.data);
   };
-  if (!id) return null;
-  // const data = DamyData[parseInt(id)];
+
   const cardInfo: TCardItem = {
     category: data?.categoryId || "unkwon",
     image: data?.imageUrl,
@@ -38,7 +49,7 @@ function PlanetDetails() {
   };
   useEffect(() => {
     fetcher();
-  }, []);
+  }, [load]);
 
   useLayoutEffect(() => {
     const token = window.localStorage.getItem("token");
@@ -94,22 +105,60 @@ function PlanetDetails() {
                   color={"white"}
                   backgroundColor={"rgb(34 197 94)"}
                   _hover={{ backgroundColor: "rgb(74 222 128)" }}
-                  onClick={() => dispatch(AddToCard(cardInfo))}
+                  onClick={() => {
+                    setClicked(!click);
+                    setTimeout(() => setClicked(false), 1000);
+                    dispatch(AddToCard(cardInfo));
+                    toast.success("plante added successfully" , {duration: 3000})
+                  }}
+                  className={cn(click ? "animate-ping" : "animate-none")}
                 >
                   Add Card
                 </Button>
               </div>
             </div>
           </div>
+          <div className="flex flex-col w-full mx-auto gap-y-5">
+            <h1 className="text-2xl font-bold text-gray-600 w-10/12 mx-auto">
+              Related Plante
+            </h1>
+            <div className=" mx-auto items-center flex  w-full overflow-x-scroll gap-x-10 px-5 no-scrollbar">
+              {data.category?.plantes.length > 0 &&
+                data.category?.plantes.map((ele: TPLante) => {
+                  if (ele.id == data.id) return null;
+                  return (
+                    <div className="w-[300px]">
+                      <FeatureComponent
+                        load={load}
+                        setLoad={setLoad}
+                        id={ele.id}
+                        category={ele.categoryId}
+                        image={ele.imageUrl}
+                        price={ele.price}
+                        rating={ele.rating}
+                        title={ele.name}
+                        discountPrice={ele.discountPrice}
+                        currency={ele.currency}
+                        key={ele.id}
+                      />
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
           <div className="relative flex flex-col bg-gray-50 mt-10  gap-y-3 w-11/12 mx-auto items-center lg:gap-x-5 lg:justify-center lg:items-start mb-5 rounded-md px-5 min-h-20 py-5">
             <div className="w-full flex justify-between px-5">
               <h1 className="text-2xl font-bold text-gray-600">Reviews</h1>
-              {istoken && <CreateReview id={data.id} />}
+              {istoken && (
+                <CreateReview setLoad={setLoad} laod={load} id={data.id} />
+              )}
             </div>
             {data.Review && data.Review?.length > 0 ? (
               <>
                 {data.Review.map((review: any) => (
                   <ReviewItem
+                    laod={load}
+                    setLoad={setLoad}
                     planteId={data.id}
                     id={review.id}
                     key={review.id}
@@ -124,6 +173,8 @@ function PlanetDetails() {
             ) : null}
           </div>
         </>
+      ) : loading ? (
+        <LoadingComponent />
       ) : null}
 
       <hr />

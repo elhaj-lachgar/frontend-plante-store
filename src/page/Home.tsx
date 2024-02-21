@@ -52,7 +52,7 @@ function Home() {
       <Banner />
       <div className="relative flex flex-col lg:flex-row lg:justify-center lg:gap-x-[150px] items-center w-full gap-y-5 my-10">
         {SectionItems.map((section) => (
-          <div className="flex flex-col lg:flex-row  items-center gap-y-4 lg:gap-x-5">
+          <div key={section.title} className="flex flex-col lg:flex-row  items-center gap-y-4 lg:gap-x-5">
             <section.icon className="text-green-400" />
             <div className="flex flex-col items-center lg:items-start gap-y-2">
               <h3 className="font-semibold">{section.title}</h3>

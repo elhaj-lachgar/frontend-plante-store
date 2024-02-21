@@ -8,8 +8,9 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex justify-center items-center flex-col gap-y-5 min-h-[100vh] bg-gray-50">
       <Suspense fallback={<Loading/>}>
-        <Link to={"/"}>
+        <Link to={"/"} className="flex gap-x-2 items-center text-xl  font-mono">
           <Logo />
+          Simply Natural
         </Link>
         {children}
       </Suspense>

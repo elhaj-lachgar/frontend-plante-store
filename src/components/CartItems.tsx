@@ -12,7 +12,7 @@ function CartItems() {
   return (
     <div className="flex flex-col gap-y-4">
       {cardItems.map((item) => (
-        <div className="flex flex-col border py-4  gap-y-3 lg:hidden">
+        <div className="flex flex-col border py-4  gap-y-3 lg:hidden" key={item.id}>
           <div className="flex justify-end items-center px-3">
             <XCircle
               color="gray"

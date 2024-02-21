@@ -5,7 +5,8 @@ import { ShoppingBag } from "lucide-react";
 import { AddToCard } from "../context/CardFeatures";
 import { TCardItem } from "../context/CardFeatures";
 import { useDispatch } from "react-redux";
-
+import cn from "classnames";
+import { useState } from "react";
 type TProps = {
   id: string;
   image: string;
@@ -15,6 +16,8 @@ type TProps = {
   rating: number;
   title: string;
   category: string;
+  setLoad?: React.Dispatch<React.SetStateAction<boolean>>;
+  load?: boolean;
 };
 
 function FeatureComponent({
@@ -26,7 +29,10 @@ function FeatureComponent({
   currency,
   title,
   category,
+  load,
+  setLoad,
 }: TProps) {
+  const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
   const cardInfo: TCardItem = {
     category: category || "unkwon",
@@ -38,21 +44,35 @@ function FeatureComponent({
   };
 
   return (
-    <div className="flex flex-col gap-x-4 w-[200px] lg:w-[300px]">
-      <div className="relative w-full h-[200px] lg:h-[300px] group">
-        <Link to={`/shop/${id}`}>
+    <div className="flex flex-col  justify-between gap-x-4  h-[300px]  lg:h-[400px]">
+      <div className="relative w-full h-[200px]  lg:h-[300px] group">
+        <Link
+          to={`/shop/${id}`}
+          onClick={() => {
+            if (load && typeof setLoad != "undefined") setLoad(!load);
+          }}
+        >
           <img
-            src={image}
+            src={image || "/plant5-free-img.jpg"}
             alt="image of plante"
             className="object-cover w-full h-full cursor-pointer"
           />
         </Link>
         <ShoppingBag
-          className="absolute top-[5px] right-[5px] hidden group-hover:block text-white cursor-pointer"
-          onClick={() => dispatch(AddToCard(cardInfo))}
+          className={cn(
+            "absolute top-[5px] right-[5px] hidden group-hover:block  cursor-pointer",
+            clicked ? "animate-ping text-green-400" : "animate-none text-white"
+          )}
+          onClick={() => {
+            setClicked(!clicked);
+            setTimeout(() => {
+              setClicked(false);
+            }, 1000);
+            dispatch(AddToCard(cardInfo));
+          }}
         />
       </div>
-      <p className="font-medium text-gray-500">{category}</p>
+      <p className="font-medium text-gray-500">{category && category}</p>
       <p className="mt-2 font-medium">{title.substring(0, 15) + "..."}</p>
       <StarRatings
         rating={rating}

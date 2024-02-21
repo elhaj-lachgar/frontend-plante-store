@@ -48,7 +48,7 @@ function CheckoutItems() {
         <h1 className="text-xl font-semibold">Cart Items</h1>
         <div className="flex flex-col gap-y-3">
           {cardItems?.map((item) => (
-            <div className="flex gap-x-3">
+            <div className="flex gap-x-3" key={item.id}>
               <div className="relative w-[75px] h-[75px]">
                 <img src={item.image} alt="image of plant" />
                 <p className="absolute top-[-10px] right-[-10px] w-[25px] h-[25px] rounded-full text-white bg-gray-400 flex justify-center items-center">

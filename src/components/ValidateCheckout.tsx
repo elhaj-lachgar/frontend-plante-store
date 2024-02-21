@@ -5,15 +5,17 @@ import { Plus } from "lucide-react";
 import GetAddresses from "../integration/get-address";
 import toast from "react-hot-toast";
 import CreateCheckout from "../integration/create-checkout";
-
+import Loading from "./Loading";
 
 function ValidateCheckout() {
   const [choisenAddress, setChoisenAdresse] = useState<null | string>(null);
   const [addresse, setAddress] = useState<any>(null);
   const [loading, setLaoding] = useState(false);
+  const [floading, setFloading] = useState(true);
 
   const Fetching = async () => {
     const res = await GetAddresses();
+    setFloading(false);
     if (!res) {
       toast.error("same thing goes wrong in fetching addresses");
       return;
@@ -43,24 +45,29 @@ function ValidateCheckout() {
       </h1>
       <hr />
       <div className=" py-3 px-3 h-full min-h-[100px] flex flex-col w-full gap-y-4">
-        {addresse
-          ? addresse.map((address: any) => (
-              <div className="flex items-center gap-x-3 border px-3 py-2 rounded-lg">
-                <input
-                  type="checkbox"
-                  className="rounded-full"
-                  id={address.id}
-                  onClick={(e) => setChoisenAdresse(e.currentTarget.id)}
-                  checked={address.id == choisenAddress}
-                />
-                <div className="fle flex-col gap-y-3 text-gray-500 ">
-                  <p>{address.city}</p>
-                  <p>{address.country}</p>
-                  <p>{address?.street}</p>
-                </div>
+        {addresse ? (
+          addresse.map((address: any) => (
+            <div
+              key={address.id}
+              className="flex items-center gap-x-3 border px-3 py-2 rounded-lg"
+            >
+              <input
+                type="checkbox"
+                className="rounded-full"
+                id={address.id}
+                onClick={(e) => setChoisenAdresse(e.currentTarget.id)}
+                checked={address.id == choisenAddress}
+              />
+              <div className="fle flex-col gap-y-3 text-gray-500 ">
+                <p>{address.city}</p>
+                <p>{address.country}</p>
+                <p>{address?.street}</p>
               </div>
-            ))
-          : null}
+            </div>
+          ))
+        ) : floading ? (
+          <Loading />
+        ) : null}
       </div>
       <hr />
       <div className="py-2 px-3">

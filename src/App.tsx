@@ -15,23 +15,39 @@ import Profile from "./page/Profile";
 import UpdateProfile from "./page/UpdateProfile";
 import ChangePassword from "./page/ChangePassword";
 import MyOrder from "./page/MyOrder";
-
+import NotFound from "./page/NotFound";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<SectionLayout children={<Home/>} />} />
+      <Route path="/" element={<SectionLayout children={<Home />} />} />
       <Route path="/about" element={<SectionLayout children={<About />} />} />
       <Route path="/shop" element={<SectionLayout children={<Shop />} />} />
-      <Route path="/shop/:id" element={<SectionLayout children={<PlanetDetails/>}/>}/>
-      <Route path="/cart" element={<SectionLayout children={<Cart/>}/>}/>
-      <Route path="/order" element={<SectionLayout children={<Order/>}/>}/>
-      <Route path="/sign-in" element={<AuthLayout children={<SignIn/>}/>}/>
-      <Route path="/sign-up" element={<AuthLayout children={<SignUp/>}/>}/>
-      <Route path="/profile/me" element={<ProtectLayout children={<Profile/>}/>}/>
-      <Route path="/profile/update-profile" element={<ProtectLayout children={<UpdateProfile/>}/>}/>
-      <Route path="/profile/change-password" element={<ProtectLayout children={<ChangePassword/>}/>}/>
-      <Route path="/profile/my-order" element={<ProtectLayout children={<MyOrder/>}/>} />
+      <Route
+        path="/shop/:id"
+        element={<SectionLayout children={<PlanetDetails />} />}
+      />
+      <Route path="/cart" element={<SectionLayout children={<Cart />} />} />
+      <Route path="/order" element={<SectionLayout children={<Order />} />} />
+      <Route path="/sign-in" element={<AuthLayout children={<SignIn />} />} />
+      <Route path="/sign-up" element={<AuthLayout children={<SignUp />} />} />
+      <Route
+        path="/profile/me"
+        element={<ProtectLayout children={<Profile />} />}
+      />
+      <Route
+        path="/profile/update-profile"
+        element={<ProtectLayout children={<UpdateProfile />} />}
+      />
+      <Route
+        path="/profile/change-password"
+        element={<ProtectLayout children={<ChangePassword />} />}
+      />
+      <Route
+        path="/profile/my-order"
+        element={<ProtectLayout children={<MyOrder />} />}
+      />
+      <Route path="/*" element={<SectionLayout children={<NotFound />} />} />
     </Routes>
   );
 }

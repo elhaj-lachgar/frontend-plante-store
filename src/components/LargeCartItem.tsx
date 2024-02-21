@@ -35,7 +35,7 @@ function LargeCartItem() {
               </Thead>
               <Tbody>
                 {cardItems.map((item) => (
-                  <Tr>
+                  <Tr key={item.id}>
                     <Td>
                       <div className="flex justify-end items-center px-3 gap-x-5">
                         <XCircle
