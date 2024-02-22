@@ -49,7 +49,7 @@ function LargeCartItem() {
                         />
                       </div>
                     </Td>
-                    <Td> {item.title}</Td>
+                    <Td> {item.title.substring(0,5) + "..."}</Td>
                     <Td>{FormatPrice(item.price)}</Td>
                     <Td>
                       <div className="flex gap-x-1 items-center">
