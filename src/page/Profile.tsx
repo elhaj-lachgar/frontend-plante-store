@@ -98,7 +98,7 @@ function Profile() {
                       <div className="flex flex-col">
                         <p className=" text-muted-foreground">{add.country}</p>
                         <p className=" text-muted-foreground">{add.city}</p>
-                        <p className=" text-muted-foreground">{add.city}</p>
+                        <p className=" text-muted-foreground">{add.street}</p>
                       </div>
                     </div>
                     <div className="gap-x-3 flex items-center">

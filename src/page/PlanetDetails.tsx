@@ -51,9 +51,7 @@ function PlanetDetails() {
     fetcher();
   }, [load]);
 
-  useEffect(() => {
-    fetcher();
-  }, []);
+
 
   useLayoutEffect(() => {
     const token = window.localStorage.getItem("token");
@@ -135,7 +133,8 @@ function PlanetDetails() {
                   return (
                     <div className="w-[300px]">
                       <FeatureComponent
-                        load={true}
+                        setLaod={setLoad}
+                        load={load}
                         id={ele.id}
                         category={ele.categoryId}
                         image={ele.imageUrl}

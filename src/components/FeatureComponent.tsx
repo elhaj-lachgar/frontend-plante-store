@@ -17,6 +17,7 @@ type TProps = {
   title: string;
   category: string;
   load?: boolean;
+  setLaod?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function FeatureComponent({
@@ -29,6 +30,7 @@ function FeatureComponent({
   title,
   category,
   load,
+  setLaod,
 }: TProps) {
   const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
@@ -47,8 +49,8 @@ function FeatureComponent({
         <Link
           to={`/shop/${id}`}
           onClick={() => {
-            if (load) {
-              window.location.reload();
+            if (typeof load != "undefined" && typeof setLaod != "undefined") {
+              setLaod(!load);
             }
           }}
         >
